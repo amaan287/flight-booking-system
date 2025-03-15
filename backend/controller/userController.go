@@ -17,7 +17,7 @@ func HashedPassword(password string) (string, error) {
 
 var secret1 = []byte("Secret")
 
-func generateJWT(UserID uint) (string, error) {
+func generateJWT(UserID int) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 	claims["user_id"] = UserID
@@ -31,16 +31,17 @@ func generateJWT(UserID uint) (string, error) {
 }
 
 func Signup(c *gin.Context) {
+	//body, _ := io.ReadAll(c.Request.Body)
+	//	fmt.Println(string(body))
 	var User struct {
 		Name     string
 		Email    string
 		Password string
 		Phone    string
 	}
-
 	if err := c.Bind(&User); err != nil {
 		c.JSON(400, gin.H{
-			"message": "Invalid request",
+			"message": "Invalid request", "Error": err,
 		})
 		return
 	}
@@ -51,16 +52,17 @@ func Signup(c *gin.Context) {
 		})
 		return
 	}
-	user := models.SignupRequest{
+	user := models.User{
 		Name:     User.Name,
 		Email:    User.Email,
 		Phone:    User.Phone,
 		Password: hashedPassword}
-	userRes := initilizers.DB.Create(&User)
+	userRes := initilizers.DB.Create(&user)
 	if userRes.Error != nil {
 		c.JSON(400, gin.H{
-			"message": "Error creating user",
+			"message": "Error creating user", "error": userRes.Error,
 		})
+		return
 	}
 	token, signError := generateJWT(user.ID)
 	if signError != nil {
