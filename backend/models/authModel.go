@@ -10,6 +10,7 @@ type User struct {
 	gorm.Model
 	ID        int       `json:"id"`
 	Email     string    `json:"email"`
+	Phone     string    `json:"phoneNumber"`
 	Password  string    `json:"-"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
@@ -17,6 +18,7 @@ type User struct {
 }
 
 type SignupRequest struct {
+	gorm.Model
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -24,14 +26,17 @@ type SignupRequest struct {
 }
 
 type SigninRequest struct {
+	gorm.Model
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
 type AuthResponse struct {
+	gorm.Model
 	Token string `json:"token"`
 	User  User   `json:"user"`
 }
 type ErrorResponse struct {
+	gorm.Model
 	Error string `json:"error"`
 }
