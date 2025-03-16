@@ -21,7 +21,8 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		c.String(200, "Hello from server")
 	})
-	router.POST("/Signup", controller.Signup)
-	fmt.Printf("Server is running on http://localhost%s", port)
+	router.POST("/signup", controller.Signup)
+	router.POST("/signin", controller.Signin)
+	fmt.Printf("Server is running on http://localhost%s\n", port)
 	http.ListenAndServe(port, router)
 }

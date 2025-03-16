@@ -9,20 +9,12 @@ import (
 type User struct {
 	gorm.Model
 	ID        int       `json:"id"`
-	Email     string    `json:"email"`
+	Email     string    `json:"email" gorm:"unique"`
 	Phone     string    `json:"phoneNumber"`
 	Password  string    `json:"password"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-}
-
-type SignupRequest struct {
-	gorm.Model
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Phone    string `json:"phoneNumber"`
 }
 
 type SigninRequest struct {
@@ -38,5 +30,6 @@ type AuthResponse struct {
 }
 type ErrorResponse struct {
 	gorm.Model
-	Error string `json:"error"`
+	Error   string `json:"error"`
+	Message string `json:"message"`
 }
