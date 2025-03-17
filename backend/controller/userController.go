@@ -222,6 +222,55 @@ func UpdatePass(c *gin.Context) {
 		"message": "Password changed successfully",
 	})
 }
+
+func UpdateName(c *gin.Context) {
+	id := c.Param("id")
+	var user models.User
+	initilizers.DB.Where("id=?", id).First(&user)
+	var Name struct {
+		OldName  string `json:"oldName"`
+		NewName  string `json:"newName"`
+		Password string `json:"password"`
+	}
+	if err := c.ShouldBind(&Name); err != nil {
+		c.JSON(400, gin.H{
+			"data": models.ErrorResponse{
+				Error:   err.Error(),
+				Message: "Error getting the name",
+			}})
+		return
+	}
+	//check users password
+	match := CheckPasswordHash(Name.Password, user.Password)
+	if !match {
+		c.JSON(400, gin.H{
+			"data": models.ErrorResponse{
+				Message: "Incorrect password",
+			}})
+		return
+	}
+	result := initilizers.DB.Model(&user).Update("name", Name.NewName)
+	if result.Error != nil {
+		c.JSON(400, gin.H{
+			"data": models.ErrorResponse{
+				Error:   result.Error.Error(),
+				Message: "Error updating the name in database",
+			}})
+		return
+	}
+	if result.RowsAffected == 0 {
+		c.JSON(500, gin.H{
+			"data": models.ErrorResponse{
+				Message: "no rows were updated",
+			}})
+		return
+	}
+	c.JSON(200, gin.H{
+		"message": "name updated successfully",
+		"User":    user,
+	})
+
+}
 func GetUser(c *gin.Context) {
 	id := c.Param("id")
 	var user models.User
