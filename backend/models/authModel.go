@@ -22,7 +22,9 @@ type SigninRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
-
+type UpdatePassword struct {
+	NewPassword string `json:"newPassword"`
+}
 type AuthResponse struct {
 	gorm.Model
 	Token string `json:"token"`

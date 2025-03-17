@@ -23,6 +23,7 @@ func main() {
 	})
 	router.POST("/signup", controller.Signup)
 	router.POST("/signin", controller.Signin)
+	router.PUT("/updatePassword/:id", controller.UpdatePass)
 	fmt.Printf("Server is running on http://localhost%s\n", port)
 	http.ListenAndServe(port, router)
 }
