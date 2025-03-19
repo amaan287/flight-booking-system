@@ -64,6 +64,7 @@ func Signup(c *gin.Context) {
 		})
 		return
 	}
+
 	user := models.User{
 		Name:     Body.Name,
 		Email:    Body.Email,
@@ -76,6 +77,7 @@ func Signup(c *gin.Context) {
 		})
 		return
 	}
+
 	fmt.Println(user.ID)
 	token, signError := generateJWT(user.ID)
 
@@ -87,6 +89,7 @@ func Signup(c *gin.Context) {
 			}})
 		return
 	}
+
 	c.JSON(200, gin.H{
 		"message": "User signed up sucessfully",
 		"data": models.AuthResponse{
